@@ -3,6 +3,9 @@ import pandas as pd
 import datetime
 import random
 import time
+import base64
+from pathlib import Path
+import textwrap
 
 st.set_page_config(
     page_title="Savanne Bewakingssysteem — Cheeta Bescherming",
@@ -50,6 +53,18 @@ THOMAS_MORE_LOGO_URL = "tm_logo.svg"
 CAMPUS_LOGO_URL = "campus_logo.svg"
 CHEETAH_IMAGE_URL = "cheetah_image.svg"
 LIVE_FEED_URL = "https://www.youtube.com/watch?v=ydYDqZQpim8"
+
+
+def svg_data_uri(svg_path: str) -> str:
+    """Zet een lokale svg om naar een data-URI zodat Streamlit Cloud ze altijd kan tonen."""
+    data = Path(svg_path).read_bytes()
+    b64 = base64.b64encode(data).decode("ascii")
+    return f"data:image/svg+xml;base64,{b64}"
+
+
+def svg_img_tag(svg_path: str, style: str) -> str:
+    uri = svg_data_uri(svg_path)
+    return f'<img src="{uri}" style="{style}" />'
 
 # ─────────────────────────────────────────────
 # CSS
@@ -316,11 +331,17 @@ col_logos, col_titel, col_info = st.columns([1.4, 5.6, 2])
 
 with col_logos:
     st.markdown('<div class="logo-card">', unsafe_allow_html=True)
-    st.image(THOMAS_MORE_LOGO_URL, use_container_width=True)
+    st.markdown(
+        svg_img_tag(THOMAS_MORE_LOGO_URL, "width:100%;height:auto;display:block;"),
+        unsafe_allow_html=True,
+    )
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="logo-card">', unsafe_allow_html=True)
-    st.image(CAMPUS_LOGO_URL, use_container_width=True)
+    st.markdown(
+        svg_img_tag(CAMPUS_LOGO_URL, "width:100%;height:auto;display:block;"),
+        unsafe_allow_html=True,
+    )
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col_titel:
@@ -523,12 +544,12 @@ elif "Informatie" in pagina:
     </div>
     """, unsafe_allow_html=True)
 
-    # Foto van de cheeta — gebruik st.image voor betrouwbare weergave
-    st.image(
-        CHEETAH_IMAGE_URL,
-        caption="📸 Cheeta (Acinonyx jubatus) in zijn natuurlijke leefomgeving — © Wikimedia Commons",
-        use_container_width=True,
+    # Cheeta foto (svg) embedded als data-URI zodat het altijd laadt op Streamlit Cloud
+    st.markdown(
+        svg_img_tag(CHEETAH_IMAGE_URL, "width:100%;height:auto;display:block;max-width:900px;margin:0 auto;"),
+        unsafe_allow_html=True,
     )
+    st.caption("📸 Cheeta (Acinonyx jubatus) — illustratie")
 
     st.markdown("---")
 
@@ -830,7 +851,7 @@ cx.fillText('Ontwijkt rotsen, stekels en gevaar — bereik score 50!', cv.width/
 # ─────────────────────────────────────────────
 elif "Credits" in pagina:
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f"""
+    credits_html = textwrap.dedent(f"""
     <div class="credits-card">
         <div style="font-size:72px;margin-bottom:16px;">🤝</div>
         <h1 style="font-family:'Playfair Display',serif;color:#E84E0F;font-size:36px;font-weight:900;margin:0 0 8px;">Een samenwerking van</h1>
@@ -857,7 +878,9 @@ elif "Credits" in pagina:
             Toegepaste Informatica · Fase 6 · {datetime.datetime.now().year}
         </p>
     </div>
-    """, unsafe_allow_html=True)
+    """).strip()
+
+    st.markdown(credits_html, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
 # INSTELLINGEN
