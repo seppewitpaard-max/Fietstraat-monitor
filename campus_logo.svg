@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="260" viewBox="0 0 800 260">
+  <rect width="800" height="260" fill="#10351f"/>
+  <rect x="8" y="8" width="784" height="244" rx="20" fill="#164a2b" stroke="#41B96A" stroke-width="6"/>
+  <text x="60" y="92" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="800" fill="#8fe3ab" letter-spacing="3">CAMPUS</text>
+  <text x="60" y="164" font-family="Georgia, serif" font-size="88" font-weight="700" fill="#ffffff">Het Spoor</text>
+  <text x="64" y="214" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="600" fill="#b8f1ca">Mol</text>
+</svg>
